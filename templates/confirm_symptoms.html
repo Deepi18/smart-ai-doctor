@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Symptoms — SMART AI DOCTOR{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-1100 px-0" style="max-width: 800px;">
+
+  <!-- Step Progress Indicator -->
+  <div class="d-flex justify-content-between align-items-center mb-4 px-2 max-w-700 mx-auto">
+    <div class="text-center">
+      <span class="step-progress-node step-node-done"><i class="fa-solid fa-check"></i></span>
+      <small class="d-block text-success fw-semibold mt-1">Describe</small>
+    </div>
+    <div class="flex-grow-1 border-top border-success border-2 mx-3"></div>
+    <div class="text-center">
+      <span class="step-progress-node step-node-active">2</span>
+      <small class="d-block text-primary fw-semibold mt-1">Review & Confirm</small>
+    </div>
+    <div class="flex-grow-1 border-top border-2 mx-3"></div>
+    <div class="text-center">
+      <span class="step-progress-node step-node-pending">3</span>
+      <small class="d-block text-muted mt-1">View Guidance</small>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-4">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold mb-2">
+        <i class="fa-solid fa-list-check text-primary me-2"></i> Step 2: Review Detected Symptoms & Clinical Context
+      </h2>
+      <p class="text-muted mb-0">
+        Review the canonical symptoms identified from your text input. Confirm symptoms, adjust duration, and specify severity level.
+      </p>
+    </div>
+
+    <form method="POST" action="/assess/submit" id="confirmForm">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <!-- Patient Information Hidden Controls -->
+      <input type="hidden" name="name" value="{{ name }}">
+      <input type="hidden" name="age" value="{{ age }}">
+      <input type="hidden" name="gender" value="{{ gender }}">
+      <input type="hidden" name="raw_free_text" value="{{ raw_free_text }}">
+
+      <!-- Patient Summary Card -->
+      <div class="bg-surface p-3 rounded-3 mb-4 border d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+          <span class="text-muted small">Patient Profile:</span>
+          <strong class="ms-2"><i class="fa-solid fa-user-circle text-primary me-1"></i> {{ name }}</strong>
+          <span class="text-muted mx-2">|</span>
+          <span>Age: {{ age }}</span>
+          <span class="text-muted mx-2">|</span>
+          <span>Gender: {{ gender }}</span>
+        </div>
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-3 py-1 rounded-pill small">
+          Step 2 of 3
+        </span>
+      </div>
+
+      <!-- Verified Canonical Symptoms Chip Selector -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold mb-2">
+          <i class="fa-solid fa-square-check text-success me-1"></i> Extracted Canonical Symptoms (Click 'X' to remove):
+        </label>
+        
+        <div class="d-flex flex-wrap gap-2 p-3 rounded-3 bg-surface border" id="symptomsListContainer">
+          {% if extracted_symptoms %}
+            {% for sym in extracted_symptoms %}
+            <div class="badge bg-primary bg-opacity-10 border border-primary text-primary px-3 py-2 rounded-pill d-flex align-items-center gap-2 fs-6 font-normal">
+              <span>{{ sym }}</span>
+              <input type="hidden" name="confirmed_symptoms" value="{{ sym }}">
+              <i class="fa-solid fa-xmark text-danger cursor-pointer" onclick="this.parentElement.remove()" title="Remove symptom"></i>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted mb-0 small" id="emptyNotice">No specific symptoms extracted. Add symptoms below.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Quick Add Extra Symptom Input -->
+      <div class="mb-4">
+        <label class="form-label text-muted small fw-semibold">
+          <i class="fa-solid fa-plus-circle text-primary me-1"></i> Add additional symptom manually:
+        </label>
+        <div class="input-group">
+          <input type="text" id="addSymptomInput" class="form-control" placeholder="e.g. Nausea, Dizziness, Back Pain">
+          <button type="button" class="btn btn-outline-primary px-4 fw-semibold" onclick="addCustomSymptom()">
+            <i class="fa-solid fa-plus me-1"></i> Add Symptom
+          </button>
+        </div>
+      </div>
+
+      <!-- Clinical Context Section (Duration & Severity) -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">
+            <i class="fa-solid fa-calendar-days text-warning me-1"></i> Symptom Duration (Days)
+          </label>
+          <input type="number" name="duration_days" class="form-control" placeholder="e.g. 3" min="1" max="365" value="3" required>
+          <small class="text-muted">How long have you experienced these symptoms?</small>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">
+            <i class="fa-solid fa-gauge-high text-danger me-1"></i> Overall Symptom Severity
+          </label>
+          <select name="severity" class="form-select" required>
+            <option value="Mild">Mild — Noticeable, but doesn't disrupt daily activities</option>
+            <option value="Moderate" selected>Moderate — Discomforting, limits daily activities</option>
+            <option value="Severe">Severe — Intense pain/discomfort, significantly incapacitating</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+        <a href="/" class="btn btn-outline-secondary btn-rounded px-4">
+          <i class="fa-solid fa-arrow-left me-1"></i> Back to Step 1
+        </a>
+        <button type="submit" class="btn btn-primary btn-rounded px-5 fw-semibold shadow-sm">
+          Generate Health Guidance <i class="fa-solid fa-stethoscope ms-2"></i>
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function addCustomSymptom() {
+    const input = document.getElementById('addSymptomInput');
+    const container = document.getElementById('symptomsListContainer');
+    const emptyNotice = document.getElementById('emptyNotice');
+    
+    if (!input || !input.value.trim()) return;
+    
+    const symText = input.value.trim();
+    if (emptyNotice) emptyNotice.remove();
+    
+    const chip = document.createElement('div');
+    chip.className = 'badge bg-primary bg-opacity-10 border border-primary text-primary px-3 py-2 rounded-pill d-flex align-items-center gap-2 fs-6 font-normal';
+    chip.innerHTML = `
+      <span>${symText}</span>
+      <input type="hidden" name="confirmed_symptoms" value="${symText}">
+      <i class="fa-solid fa-xmark text-danger cursor-pointer" onclick="this.parentElement.remove()" title="Remove symptom"></i>
+    `;
+    
+    container.appendChild(chip);
+    input.value = '';
+  }
+</script>
+{% endblock %}

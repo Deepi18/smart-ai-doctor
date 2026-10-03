@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Find Specialist Doctors — SMART AI DOCTOR Portal{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-1100 px-0">
+
+  <!-- Header Banner -->
+  <div class="card text-center mb-4 p-4">
+    <h1 class="fw-bold mb-2">
+      <i class="fa-solid fa-user-doctor text-primary me-2"></i> Verified Healthcare Directory (Tamil Nadu, India)
+    </h1>
+    <p class="text-muted mb-0 max-w-700 mx-auto">
+      Search verified medical departments and specialty care facilities across primary healthcare centers in Tamil Nadu.
+    </p>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="card mb-4 p-3">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input 
+            type="text" 
+            id="doctorSearchInput" 
+            class="form-control" 
+            placeholder="Search department, hospital, or city (e.g. Chennai, Vellore, Coimbatore)..."
+          >
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="d-flex gap-2 flex-wrap justify-content-md-end" id="specialtyFilters">
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 doc-filter-btn active" data-specialty="All">All Specialties</button>
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 doc-filter-btn" data-specialty="Pulmonologist">Pulmonology</button>
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 doc-filter-btn" data-specialty="Cardiologist">Cardiology</button>
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 doc-filter-btn" data-specialty="Neurologist">Neurology</button>
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 doc-filter-btn" data-specialty="Gastroenterologist">Gastroenterology</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctor Cards Grid -->
+  <div class="row g-4" id="doctorsGrid">
+    {% for doc in doctors %}
+    <div class="col-md-6 col-lg-4 doc-item" data-specialty="{{ doc.specialty }}" data-search="{{ doc.name }} {{ doc.hospital }} {{ doc.location }}">
+      <div class="card h-100 p-4 d-flex flex-column justify-content-between shadow-sm">
+        <div>
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 rounded-pill px-3 py-1">
+              {{ doc.specialty }}
+            </span>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-2 py-1 rounded-pill small">
+              <i class="fa-solid fa-circle-check me-1"></i> Source Verified
+            </span>
+          </div>
+
+          <h4 class="fw-bold mb-1">{{ doc.name }}</h4>
+          <small class="text-muted d-block mb-3">
+            <i class="fa-solid fa-hospital text-primary me-1"></i> {{ doc.hospital }}
+          </small>
+
+          <p class="small text-muted mb-2">
+            <i class="fa-solid fa-location-dot text-danger me-1"></i> City / Region: <strong>{{ doc.location }}</strong>
+          </p>
+
+          <p class="small text-muted mb-2">
+            <i class="fa-solid fa-clock text-warning me-1"></i> Availability: {{ doc.availability }}
+          </p>
+
+          {% if doc.source_url %}
+          <div class="mt-3 pt-2 border-top">
+            <small class="text-muted d-block mb-1">Directory Verification Source:</small>
+            <a href="{{ doc.source_url }}" target="_blank" rel="noopener noreferrer" class="small text-primary text-decoration-none fw-semibold">
+              <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> {{ doc.source_type or 'Official Directory Portal' }}
+            </a>
+            <small class="text-muted d-block mt-1">Last verified date: {{ doc.last_verified or '2025-01' }}</small>
+          </div>
+          {% endif %}
+        </div>
+
+        <button 
+          class="btn btn-primary btn-rounded w-100 mt-3 fw-semibold py-2 book-doc-btn" 
+          data-bs-toggle="modal" 
+          data-bs-target="#appointmentModal"
+          data-doc-id="{{ doc.id }}"
+          data-doc-name="{{ doc.name }}"
+        >
+          <i class="fa-solid fa-calendar-check me-1"></i> Request Consultation
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+<!-- Appointment Booking Modal -->
+<div class="modal fade" id="appointmentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content card border-0 shadow-lg">
+      <div class="modal-header border-bottom">
+        <h5 class="modal-title fw-bold"><i class="fa-solid fa-calendar-plus text-primary me-2"></i> Schedule Specialist Consultation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="appointmentForm">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" id="modalDocId" name="doctor_id">
+          
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Selected Department / Institution</label>
+            <input type="text" id="modalDocName" class="form-control text-primary fw-bold" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Patient Name</label>
+            <input type="text" name="patient_name" class="form-control" placeholder="e.g. Jane Smith" value="{{ session.get('username', '') }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Patient Email</label>
+            <input type="email" name="patient_email" class="form-control" placeholder="e.g. jane@example.com" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Requested Appointment Date</label>
+            <input type="date" name="appointment_date" class="form-control" required min="{{ current_date }}">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-muted small fw-semibold">Reason for Consultation</label>
+            <textarea name="reason" class="form-control" rows="2" placeholder="e.g. Consultation regarding symptom assessment report SAD-104..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 btn-rounded fw-semibold py-2 mt-2">
+            <i class="fa-solid fa-paper-plane me-1"></i> Submit Booking Request
+          </button>
+        </form>
+
+        <div id="bookingResult" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

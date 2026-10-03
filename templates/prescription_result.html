@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Prescription Safety Review Results — SMART AI DOCTOR{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-1100 px-0">
+
+  <div class="card shadow-sm p-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+      <div>
+        <h2 class="fw-bold mb-1"><i class="fa-solid fa-shield-halved text-info me-2"></i> Medication Safety Reference Report</h2>
+        <p class="text-muted mb-0 small">Evaluated against configured clinical pharmacology reference database</p>
+      </div>
+
+      <div>
+        <span class="badge px-3 py-2 fs-6 rounded-pill" style="background-color: {{ review.color }}18; border: 1px solid {{ review.color }}; color: {{ review.color }}; font-weight: 600;">
+          <i class="fa-solid fa-circle-info me-1"></i> {{ review.status_label }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Summary Box -->
+    <div class="row g-3 p-3 rounded-3 mb-4 bg-surface border">
+      <div class="col-md-3 col-6">
+        <small class="text-muted d-block">Prescribed Medicine</small>
+        <strong class="text-primary fs-5">{{ review.prescribed_medicine }}</strong>
+      </div>
+      <div class="col-md-3 col-6">
+        <small class="text-muted d-block">Drug Class / Generic</small>
+        <strong class="text-main">{{ review.drug_class or 'N/A' }} ({{ review.generic_name or 'N/A' }})</strong>
+      </div>
+      <div class="col-md-3 col-6">
+        <small class="text-muted d-block">Max Reference Dose</small>
+        <strong class="text-main">{{ review.max_daily_dose or 'Reference Data Unavailable in Configured Database' }}</strong>
+      </div>
+      <div class="col-md-3 col-6">
+        <small class="text-muted d-block">Safety Review Status</small>
+        <strong style="color: {{ review.color }}">{{ review.status }}</strong>
+      </div>
+    </div>
+
+    <!-- Safety Flags List -->
+    <h4 class="fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Safety Observations & Interaction Signals</h4>
+
+    {% if review.flags %}
+      <div class="d-flex flex-column gap-3 mb-4">
+        {% for flag in review.flags %}
+        <div class="p-3 rounded-3 border bg-surface" style="border-color: {% if flag.severity == 'CRITICAL' %}var(--danger-color){% else %}var(--warning-color){% endif %} !important;">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h5 class="fw-bold mb-0 {% if flag.severity == 'CRITICAL' %}text-danger{% else %}text-warning{% endif %}">
+              <i class="fa-solid fa-circle-exclamation me-1"></i> {{ flag.title }}
+            </h5>
+            <span class="badge {% if flag.severity == 'CRITICAL' %}bg-danger text-white{% else %}bg-warning text-dark{% endif %} px-3 py-1 rounded-pill">
+              {{ flag.category }}
+            </span>
+          </div>
+          <p class="mb-0 text-muted small">{{ flag.detail }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-success border-success text-success bg-success bg-opacity-10 mb-4 p-3 rounded-3">
+        <i class="fa-solid fa-circle-check me-2"></i> <strong>No Interaction Identified in Configured Reference Database</strong> for <strong>{{ review.prescribed_medicine }}</strong>.
+      </div>
+    {% endif %}
+
+    <div class="p-3 rounded-3 mb-4 bg-surface border-start border-4 border-info">
+      <h6 class="fw-bold text-info mb-1"><i class="fa-solid fa-user-doctor me-1"></i> Recommended Action Steps</h6>
+      <p class="mb-0 small text-muted">{{ review.recommendation }}</p>
+    </div>
+
+    <div class="d-flex gap-3 flex-wrap align-items-center">
+      <a href="/prescription" class="btn btn-primary btn-rounded">
+        <i class="fa-solid fa-rotate-left me-1"></i> Check Another Medication
+      </a>
+      <a href="/doctors" class="btn btn-outline-primary btn-rounded">
+        <i class="fa-solid fa-user-doctor me-1"></i> Consult Specialist Doctor
+      </a>
+      <a href="/" class="btn btn-outline-secondary btn-rounded">
+        <i class="fa-solid fa-stethoscope me-1"></i> Symptom Assessment
+      </a>
+    </div>
+  </div>
+
+  <div class="card p-3 text-muted small mt-3 text-center">
+    <i class="fa-solid fa-shield-halved me-1"></i>
+    <strong>Disclaimer:</strong> {{ review.disclaimer }}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Knowledge Encyclopedia — SMART AI DOCTOR{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-1100 px-0">
+
+  <!-- Header Banner -->
+  <div class="card text-center mb-4 p-4">
+    <h1 class="fw-bold mb-2">
+      <i class="fa-solid fa-book-medical text-success me-2"></i> Clinical Reference Health Library
+    </h1>
+    <p class="text-muted mb-0 max-w-700 mx-auto">
+      Explore reference condition profiles, common symptoms, general information, when to seek care, and source metadata for educational health information.
+    </p>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="card mb-4 p-3">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-7">
+        <div class="input-group">
+          <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input 
+            type="text" 
+            id="kbSearchInput" 
+            class="form-control" 
+            placeholder="Search condition name, symptom, or keyword..."
+          >
+        </div>
+      </div>
+      <div class="col-md-5">
+        <select id="kbCategorySelect" class="form-select">
+          <option value="All">All Categories</option>
+          <option value="Respiratory">Respiratory</option>
+          <option value="Neurological">Neurological</option>
+          <option value="Digestive">Digestive</option>
+          <option value="Cardiovascular">Cardiovascular</option>
+          <option value="General Health">General Health</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Knowledge Grid -->
+  <div class="row g-4" id="kbGrid">
+    {% for item in items %}
+    <div class="col-md-6 kb-card-item" data-category="{{ item.category }}" data-search="{{ item.condition_name }} {{ item.symptoms }} {{ item.description }}">
+      <div class="card h-100 p-4 d-flex flex-column justify-content-between shadow-sm">
+        <div>
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h4 class="fw-bold mb-0">{{ item.condition_name }}</h4>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 rounded-pill px-3 py-1">
+              {{ item.category }}
+            </span>
+          </div>
+
+          <p class="text-muted small mb-3">{{ item.description }}</p>
+
+          <div class="mb-3 p-3 rounded-3 bg-surface border">
+            <small class="text-primary d-block fw-semibold mb-1"><i class="fa-solid fa-list-ul me-1"></i> Common Symptoms:</small>
+            <span class="small text-muted">{{ item.symptoms }}</span>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top small text-muted">
+          <span><i class="fa-solid fa-user-doctor text-primary me-1"></i> Relevant Specialty: <strong>{{ item.specialist }}</strong></span>
+          <span><i class="fa-solid fa-shield-cat text-warning me-1"></i> Risk Factors: {{ item.risk_factors }}</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

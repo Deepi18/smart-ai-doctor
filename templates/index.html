@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}SMART AI DOCTOR — AI-Assisted Symptom Assessment & Medical Decision Support{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-1100 px-0">
+
+  <!-- Dashboard Hero Section -->
+  <div class="card mb-4 text-center p-4 p-md-5">
+    <div class="mb-2">
+      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 rounded-pill px-3 py-1 font-monospace">
+        <i class="fa-solid fa-shield-halved me-1"></i> Healthcare Decision Support Reference
+      </span>
+    </div>
+    
+    <h1 class="mb-3 fw-bold">
+      AI-Assisted Healthcare Guidance
+    </h1>
+    
+    <p class="text-muted mb-4 max-w-700 mx-auto fs-6">
+      Understand your symptoms, review possible health patterns, explore trusted medical information, and find healthcare resources.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="#assessmentSection" class="btn btn-primary btn-rounded px-4 py-2.5 fw-semibold shadow-sm">
+        <i class="fa-solid fa-stethoscope me-1"></i> Check My Symptoms
+      </a>
+      <a href="/doctors" class="btn btn-outline-secondary btn-rounded px-4 py-2.5 fw-semibold">
+        <i class="fa-solid fa-user-doctor me-1"></i> Find Doctors
+      </a>
+      <a href="/knowledge" class="btn btn-outline-secondary btn-rounded px-4 py-2.5 fw-semibold">
+        <i class="fa-solid fa-book-medical me-1"></i> Explore Health Library
+      </a>
+    </div>
+  </div>
+
+  <!-- SaaS Feature Grid Overview -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <i class="fa-solid fa-clipboard-check"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0">Symptom Assessment</h6>
+          <small class="text-muted">AI-assisted health information</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper" style="background-color: rgba(245, 158, 11, 0.1); color: var(--warning-color);">
+          <i class="fa-solid fa-pills"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0">Prescription Safety</h6>
+          <small class="text-muted">Medication reference tool</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper" style="background-color: rgba(16, 185, 129, 0.1); color: var(--success-color);">
+          <i class="fa-solid fa-book-medical"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0">Health Information</h6>
+          <small class="text-muted">Verified reference articles</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper" style="background-color: rgba(6, 182, 212, 0.1); color: var(--info-color);">
+          <i class="fa-solid fa-user-doctor"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0">Find Specialists</h6>
+          <small class="text-muted">Hospital & directory database</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Symptom Assessment Card -->
+  <div class="card shadow-sm" id="assessmentSection">
+    
+    <!-- Step Flow Progress Bar -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2 max-w-700 mx-auto">
+      <div class="text-center">
+        <span class="step-progress-node step-node-active">1</span>
+        <small class="d-block text-primary fw-semibold mt-1">Describe Symptoms</small>
+      </div>
+      <div class="flex-grow-1 border-top border-primary border-2 mx-3"></div>
+      <div class="text-center">
+        <span class="step-progress-node step-node-pending">2</span>
+        <small class="d-block text-muted mt-1">Review & Confirm</small>
+      </div>
+      <div class="flex-grow-1 border-top border-2 mx-3"></div>
+      <div class="text-center">
+        <span class="step-progress-node step-node-pending">3</span>
+        <small class="d-block text-muted mt-1">View Guidance</small>
+      </div>
+    </div>
+
+    <form method="POST" action="/assess/confirm" id="diagnosisForm">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+      <!-- Patient Profile Demographics -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold text-muted">Patient Name</label>
+          <input type="text" name="name" class="form-control" placeholder="e.g. Jane Smith" value="{{ session.get('username', '') }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold text-muted">Age</label>
+          <input type="number" name="age" class="form-control" placeholder="e.g. 28" min="1" max="120" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold text-muted">Gender</label>
+          <select name="gender" class="form-select" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <!-- Natural Language Free-Text Symptom Description -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="form-label mb-0 fw-semibold">
+            <i class="fa-solid fa-comment-medical text-primary me-1"></i> Describe what you're experiencing
+          </label>
+          <span class="text-muted small" id="charCounter">0 chars</span>
+        </div>
+        
+        <textarea 
+          name="free_text_symptoms" 
+          id="freeTextSymptoms"
+          class="form-control" 
+          rows="3" 
+          placeholder="Describe what you're experiencing, for example: I have a headache, nausea and sensitivity to light."
+        ></textarea>
+        
+        <div class="d-flex align-items-center gap-2 mt-2 flex-wrap">
+          <span class="small text-muted fw-semibold"><i class="fa-solid fa-lightbulb text-warning me-1"></i> Examples:</span>
+          <span class="example-pill" onclick="fillExample('I have severe headache with nausea and light sensitivity.')">
+            Headache + Nausea + Light Sensitivity
+          </span>
+          <span class="example-pill" onclick="fillExample('I have burning while urinating and frequent urination.')">
+            Burning Urination + Frequency
+          </span>
+          <span class="example-pill" onclick="fillExample('High fever with shivering chills and severe dry cough.')">
+            Fever + Cough + Chills
+          </span>
+        </div>
+      </div>
+
+      <!-- Interactive Symptom Selection Grid -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+          <label class="form-label mb-0 fw-semibold">
+            <i class="fa-solid fa-list-check text-info me-1"></i> Or select detected symptoms manually
+          </label>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-primary rounded-pill px-3 py-1 small" id="selectedCountBadge">0 Selected</span>
+            <input 
+              type="text" 
+              id="symptomSearch" 
+              class="form-control form-control-sm" 
+              placeholder="🔍 Search symptoms..."
+              style="width: 180px;"
+            >
+          </div>
+        </div>
+
+        <!-- Category Pills Filter -->
+        <div class="category-filter mt-2">
+          <span class="cat-pill active" data-category="All">All</span>
+          <span class="cat-pill" data-category="Respiratory">Respiratory</span>
+          <span class="cat-pill" data-category="General">General</span>
+          <span class="cat-pill" data-category="Neurological">Neurological</span>
+          <span class="cat-pill" data-category="Digestive">Digestive</span>
+          <span class="cat-pill" data-category="Cardiovascular & Other">Cardiovascular</span>
+        </div>
+
+        <!-- Symptom Checkbox Grid -->
+        <div class="symptoms-grid mt-3">
+          {% for sym in symptoms %}
+          <div class="symptom-tag">
+            <input type="checkbox" name="symptoms" value="{{ sym }}" id="sym_{{ loop.index }}" onchange="updateSelectedCounter()">
+            <label for="sym_{{ loop.index }}">{{ sym }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary btn-rounded px-5 py-2.5 fw-semibold shadow-sm">
+          Proceed to Step 2: Confirm Symptoms <i class="fa-solid fa-arrow-right ms-2"></i>
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="card p-3 mt-4 text-center text-muted small bg-transparent border-0">
+    <p class="mb-0">
+      <i class="fa-solid fa-circle-info text-info me-1"></i> <strong>Medical Disclaimer:</strong> This tool provides AI-assisted health information and does not replace professional medical evaluation.
+    </p>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function fillExample(text) {
+    const area = document.getElementById('freeTextSymptoms');
+    if (area) {
+      area.value = text;
+      updateCharCounter();
+    }
+  }
+
+  function updateCharCounter() {
+    const area = document.getElementById('freeTextSymptoms');
+    const counter = document.getElementById('charCounter');
+    if (area && counter) {
+      counter.textContent = area.value.length + ' chars';
+    }
+  }
+
+  function updateSelectedCounter() {
+    const checkboxes = document.querySelectorAll('.symptoms-grid input[type="checkbox"]:checked');
+    const badge = document.getElementById('selectedCountBadge');
+    if (badge) {
+      badge.textContent = checkboxes.length + ' Selected';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const area = document.getElementById('freeTextSymptoms');
+    if (area) {
+      area.addEventListener('input', updateCharCounter);
+    }
+  });
+</script>
+{% endblock %}

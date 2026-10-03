@@ -1,0 +1,28 @@
+# Environment Variables & Secrets
+.env
+*.env
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Database & SQLite files
+*.db
+*.sqlite3
+instance/
+
+# Machine Learning Model Artifacts & Outputs
+models/*.joblib
+*.joblib
+
+# Test Outputs & IDE files
+.vscode/
+.idea/
+.DS_Store
+*.log
+scratch/
+

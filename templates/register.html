@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Registration — SMART AI DOCTOR{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-700 px-0" style="max-width: 460px;">
+  <div class="card p-4 shadow-sm my-4">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold mb-1"><i class="fa-solid fa-user-plus text-primary me-2"></i> Patient Registration</h2>
+      <p class="text-muted small">Create a patient account for history logging and report exports</p>
+    </div>
+
+    {% if error %}
+      <div class="alert alert-danger border-0 small py-2 mb-3 rounded-3">
+        <i class="fa-solid fa-circle-xmark me-1"></i> {{ error }}
+      </div>
+    {% endif %}
+
+    <form method="POST" action="/register">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <div class="mb-3">
+        <label class="form-label text-muted small fw-semibold">Username</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+          <input type="text" name="username" class="form-control" placeholder="e.g. janesmith" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-muted small fw-semibold">Email Address</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+          <input type="email" name="email" class="form-control" placeholder="jane@example.com" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-muted small fw-semibold">Password</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+          <input type="password" name="password" class="form-control" placeholder="Create secure password" required minlength="6">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 btn-rounded py-2.5 fw-semibold mt-3 shadow-sm">
+        <i class="fa-solid fa-user-check me-1"></i> Create Patient Account
+      </button>
+    </form>
+
+    <div class="text-center mt-4 pt-3 border-top small text-muted">
+      Already registered? <a href="/login" class="text-primary fw-semibold text-decoration-none ms-1">Sign In Here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

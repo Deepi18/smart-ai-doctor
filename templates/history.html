@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Assessment History — SMART AI DOCTOR{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-1100 px-0">
+
+  <!-- Header Banner -->
+  <div class="card text-center mb-4 p-4">
+    <h1 class="fw-bold mb-2">
+      <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Assessment History Log
+    </h1>
+    <p class="text-muted mb-0 max-w-700 mx-auto">
+      Review past health assessments, inspect differential guidance summaries, and export official PDF reports.
+    </p>
+  </div>
+
+  <!-- History Items List -->
+  {% if assessments %}
+    <div class="d-flex flex-column gap-3">
+      {% for item in assessments %}
+      <div class="card p-4 shadow-sm" id="history_row_{{ item.id }}">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+          <div>
+            <h4 class="fw-bold mb-1">
+              <i class="fa-solid fa-user-circle text-primary me-1"></i> {{ item.patient_name }}
+              <span class="text-muted fs-6 font-normal">({{ item.patient_age }} yrs, {{ item.patient_gender }})</span>
+            </h4>
+            <small class="text-muted">Assessment Date: {{ item.created_at }} | Reference ID: #SAD-{{ item.id }}</small>
+          </div>
+
+          <div>
+            {% if item.overall_urgency == 'High' %}
+              <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-20 rounded-pill px-3 py-1.5">
+                <i class="fa-solid fa-triangle-exclamation me-1"></i> Emergency Review Suggested
+              </span>
+            {% elif item.overall_urgency == 'Moderate' %}
+              <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-20 rounded-pill px-3 py-1.5">
+                <i class="fa-solid fa-circle-info me-1"></i> Moderate Assessment
+              </span>
+            {% else %}
+              <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 rounded-pill px-3 py-1.5">
+                <i class="fa-solid fa-circle-check me-1"></i> Routine Guidance
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="mb-3 p-3 rounded-3 bg-surface border">
+          <small class="text-muted d-block mb-1 fw-semibold">Reported Symptoms Vector:</small>
+          <span class="text-primary fw-bold">{{ item.symptoms }}</span>
+        </div>
+
+        <!-- Top ML Prediction Badges (Clean qualitative presentation) -->
+        <div class="mb-3">
+          <small class="text-muted d-block mb-2 fw-semibold">Evaluated Condition Patterns:</small>
+          <div class="d-flex gap-2 flex-wrap">
+            {% for pred in item.ml_predictions %}
+              <span class="badge bg-surface text-main border px-3 py-1.5 rounded-pill small">
+                {{ pred.disease }}
+              </span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3 border-top">
+          <form method="POST" action="/download_pdf/{{ item.id }}" target="_blank" class="m-0">
+            <button type="submit" class="btn btn-sm btn-primary btn-rounded px-4 fw-semibold">
+              <i class="fa-solid fa-file-pdf me-1"></i> Download PDF Report
+            </button>
+          </form>
+
+          <button class="btn btn-sm btn-outline-danger btn-rounded px-3 delete-history-btn" data-id="{{ item.id }}">
+            <i class="fa-solid fa-trash me-1"></i> Delete Record
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card text-center p-5 shadow-sm">
+      <div class="my-3">
+        <i class="fa-solid fa-folder-open fa-3x text-muted mb-3"></i>
+        <h3 class="fw-bold mb-2">No Assessment Records Found</h3>
+        <p class="text-muted mb-4">You have not logged any symptom assessment reports yet.</p>
+        <a href="/" class="btn btn-primary btn-rounded px-5 fw-semibold shadow-sm">
+          <i class="fa-solid fa-stethoscope me-1"></i> Start First Assessment
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

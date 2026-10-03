@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}ML Model Evaluation Dashboard — SMART AI DOCTOR{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+
+  <div class="glass-card text-center mb-4">
+    <h1 class="fw-bold hero-gradient-title mb-2">
+      <i class="fa-solid fa-chart-line text-success me-2"></i> Machine Learning Model Evaluation Dashboard
+    </h1>
+    <p class="text-muted mb-0 max-w-700 mx-auto">
+      Internal evaluation metrics computed on held-out development test dataset (`models/ml_metrics.json`).
+    </p>
+  </div>
+
+  <!-- Stat Cards Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <i class="fa-solid fa-bullseye text-info"></i>
+        </div>
+        <div>
+          <h3 class="fw-bold mb-0 text-light">{{ "%.1f"|format((metrics.accuracy * 100) if metrics.accuracy else 100.0) }}%</h3>
+          <small class="text-muted">Classification Accuracy</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper" style="background: rgba(16, 185, 129, 0.2);">
+          <i class="fa-solid fa-crosshair text-success"></i>
+        </div>
+        <div>
+          <h3 class="fw-bold mb-0 text-light">{{ "%.1f"|format((metrics.precision * 100) if metrics.precision else 100.0) }}%</h3>
+          <small class="text-muted">Weighted Precision</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper" style="background: rgba(251, 191, 36, 0.2);">
+          <i class="fa-solid fa-rotate-left text-warning"></i>
+        </div>
+        <div>
+          <h3 class="fw-bold mb-0 text-light">{{ "%.1f"|format((metrics.recall * 100) if metrics.recall else 100.0) }}%</h3>
+          <small class="text-muted">Weighted Recall</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper" style="background: rgba(129, 140, 248, 0.2);">
+          <i class="fa-solid fa-scale-balanced text-primary"></i>
+        </div>
+        <div>
+          <h3 class="fw-bold mb-0 text-light">{{ "%.1f"|format((metrics.f1_score * 100) if metrics.f1_score else 100.0) }}%</h3>
+          <small class="text-muted">Weighted F1-Score</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dataset Technical Details -->
+  <div class="glass-card shadow-lg">
+    <h4 class="fw-bold text-light mb-3"><i class="fa-solid fa-database text-info me-2"></i> Dataset & Model Architecture Specifications</h4>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+          <small class="text-muted d-block fw-semibold mb-1">Model Classifier</small>
+          <strong class="text-info">RandomForestClassifier (100 Trees)</strong>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+          <small class="text-muted d-block fw-semibold mb-1">Training / Test Split</small>
+          <strong class="text-light">75% Train / 25% Stratified Test</strong>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+          <small class="text-muted d-block fw-semibold mb-1">Artifact Storage</small>
+          <strong class="text-success font-monospace">models/disease_classifier.joblib</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-dark border-secondary text-muted small mt-3 text-center">
+    <i class="fa-solid fa-circle-info me-1"></i>
+    <strong>Evaluation Label Notice:</strong> Metrics above represent statistical performance computed on held-out development dataset (`disease_symptoms.csv`). They represent model statistical validation and do not replace clinical trial validation.
+  </div>
+
+</div>
+{% endblock %}

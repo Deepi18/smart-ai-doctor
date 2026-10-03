@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}Possible Health Patterns Assessment — SMART AI DOCTOR{% endblock %}
+
+{% block content %}
+<div class="container-fluid max-w-1100 px-0">
+
+  <!-- Step Progress Indicator -->
+  <div class="d-flex justify-content-between align-items-center mb-4 px-2 max-w-700 mx-auto">
+    <div class="text-center">
+      <span class="step-progress-node step-node-done"><i class="fa-solid fa-check"></i></span>
+      <small class="d-block text-success fw-semibold mt-1">Describe</small>
+    </div>
+    <div class="flex-grow-1 border-top border-success border-2 mx-3"></div>
+    <div class="text-center">
+      <span class="step-progress-node step-node-done"><i class="fa-solid fa-check"></i></span>
+      <small class="d-block text-success fw-semibold mt-1">Confirm</small>
+    </div>
+    <div class="flex-grow-1 border-top border-primary border-2 mx-3"></div>
+    <div class="text-center">
+      <span class="step-progress-node step-node-active">3</span>
+      <small class="d-block text-primary fw-semibold mt-1">View Guidance</small>
+    </div>
+  </div>
+
+  <!-- 1. Emergency Safety Triage Alert Banner -->
+  {% if result.safety_result and result.safety_result.is_emergency %}
+  <div class="card mb-4 p-4 border-danger" style="background-color: rgba(239, 68, 68, 0.08);">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <i class="fa-solid fa-triangle-exclamation fa-2x text-danger"></i>
+      <div>
+        <h3 class="fw-bold text-danger mb-0">URGENT MEDICAL EVALUATION RECOMMENDED</h3>
+        <p class="text-muted mb-0 small">Independent safety triage flagged red-flag health signals requiring immediate medical care.</p>
+      </div>
+    </div>
+    {% for alert in result.safety_result.alerts %}
+      <div class="alert alert-danger py-2 mb-2 small border-0 text-white bg-danger mt-2">
+        <strong>{{ alert.name }}:</strong> {{ alert.message }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 2. Patient Header & Action Bar -->
+  <div class="card mb-4 p-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-3 py-1 rounded-pill mb-2 font-monospace">
+          Ref ID: SAD-{{ assessment_id }}
+        </span>
+        <h2 class="fw-bold mb-1">
+          Health Assessment Guidance Report
+        </h2>
+        <p class="text-muted mb-0 small">
+          Patient: <strong>{{ name }}</strong> ({{ age }} yrs / {{ gender }}) | Reported Symptoms: <strong class="text-primary">{{ symptoms }}</strong>
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <a href="/download_pdf/{{ assessment_id }}" class="btn btn-primary btn-rounded fw-semibold shadow-sm">
+          <i class="fa-solid fa-file-pdf me-1"></i> Download PDF Report
+        </a>
+        <a href="/" class="btn btn-outline-secondary btn-rounded">
+          <i class="fa-solid fa-rotate-left me-1"></i> New Assessment
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Insufficient Information / Coverage Notice -->
+  {% if result.coverage_result and result.coverage_result.coverage_status == 'INSUFFICIENT_INFORMATION' %}
+  <div class="card mb-4 p-4 border-warning" style="background-color: rgba(245, 158, 11, 0.08);">
+    <div class="d-flex align-items-start gap-3">
+      <i class="fa-solid fa-circle-exclamation text-warning fa-2x mt-1"></i>
+      <div>
+        <h4 class="fw-bold text-warning mb-1">Insufficient Information for a Specific Pattern</h4>
+        <p class="text-muted mb-0">
+          The reported symptoms require additional clinical context or symptom details before a specific condition pattern can be identified. Please review the follow-up questions below to discuss with a healthcare professional.
+        </p>
+      </div>
+    </div>
+  </div>
+  {% elif result.coverage_result and result.coverage_result.coverage_status == 'OPEN_SET_UNSUPPORTED_CASE' %}
+  <div class="card mb-4 p-4 border-warning" style="background-color: rgba(245, 158, 11, 0.08);">
+    <div class="d-flex align-items-start gap-3">
+      <i class="fa-solid fa-shield-halved text-warning fa-2x mt-1"></i>
+      <div>
+        <h4 class="fw-bold text-warning mb-1">Out-of-Scope Symptom Pattern</h4>
+        <p class="text-muted mb-0">
+          The provided symptoms are outside our current configured reference database. Please consult a qualified healthcare professional.
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 4. Possible Conditions to Discuss with a Healthcare Professional -->
+  <div class="card mb-4 p-4">
+    <h3 class="fw-bold mb-3">
+      <i class="fa-solid fa-stethoscope text-primary me-2"></i> Possible Conditions to Discuss with a Healthcare Professional
+    </h3>
+
+    {% if result.differential_conditions %}
+      {% for item in result.differential_conditions %}
+      <div class="card mb-4 p-4 shadow-sm">
+        <!-- 1. CONDITION HEADER (Condition Name + Pattern Alignment) -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+          <h4 class="fw-bold mb-0 text-main fs-4">
+            {{ item.condition_name }}
+          </h4>
+          <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-3 py-1.5 rounded-pill font-monospace small fw-semibold">
+            {{ item.score_label }}
+          </span>
+        </div>
+
+        <!-- 2. SHORT EXPLANATION (Description) -->
+        <p class="text-muted mb-4 lead fs-6">
+          {{ item.description }}
+        </p>
+
+        <!-- 3. MATCHING SYMPTOMS (Primary Evidence Section) -->
+        <div class="mb-4 p-3 rounded-3 bg-surface border-0">
+          <h6 class="fw-bold mb-1 text-main">
+            <i class="fa-solid fa-square-check text-success me-1"></i> Why this result?
+          </h6>
+          <p class="text-muted small mb-2">Based on the symptoms you reported:</p>
+          <div class="d-flex flex-wrap gap-2">
+            {% for sym in item.matched_symptoms %}
+              <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-3 py-1.5 rounded-pill small font-normal fs-6">
+                <i class="fa-solid fa-check me-1"></i> {{ sym }}
+              </span>
+            {% else %}
+              <span class="text-muted small">None matched</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 4. UNREPORTED TYPICAL SYMPTOMS (Collapsible Secondary Details) -->
+        {% if item.unreported_symptoms %}
+        <div class="mb-4">
+          <details class="text-muted small">
+            <summary class="cursor-pointer fw-semibold text-muted py-1" style="user-select: none;">
+              <i class="fa-solid fa-chevron-right me-1 fs-8"></i> Other symptoms commonly associated with this condition
+            </summary>
+            <div class="d-flex flex-wrap gap-1.5 mt-2 ms-3">
+              {% for sym in item.unreported_symptoms %}
+                <span class="badge bg-body-tertiary text-muted border border-secondary border-opacity-20 px-2.5 py-1 rounded-pill fs-8 font-normal">
+                  • {{ sym }}
+                </span>
+              {% endfor %}
+            </div>
+          </details>
+        </div>
+        {% endif %}
+
+        <!-- 5. RELEVANT CARE (Who can help?) -->
+        <div class="d-flex align-items-center gap-2 mb-3 text-muted small">
+          <span class="fw-semibold text-main me-1"><i class="fa-solid fa-user-doctor text-primary me-1"></i> Who can help?</span>
+          <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-3 py-1 rounded-pill fw-semibold">
+            {{ item.specialist }}
+          </span>
+        </div>
+
+        <!-- 6. CLINICAL REFERENCE (Small Secondary Footer Row) -->
+        {% if item.reference %}
+        <div class="mb-3 text-muted fs-8 d-flex align-items-center gap-2">
+          <span>Medical reference:</span>
+          {% if item.source_url %}
+            <a href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer" class="text-primary text-decoration-none fw-semibold">
+              <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> {{ item.reference }}
+            </a>
+          {% else %}
+            <span class="fw-semibold text-main"><i class="fa-solid fa-bookmark me-1"></i> {{ item.reference }}</span>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- 7. MEDICATION REFERENCE (ONLY IF AVAILABLE) -->
+        {% if item.medication_references %}
+        <div class="mt-3 pt-3 border-top">
+          <h6 class="fw-bold mb-2 text-main small">
+            <i class="fa-solid fa-pills text-warning me-1"></i> Medication information
+          </h6>
+          <div class="row g-2 mb-2">
+            {% for med in item.medication_references %}
+            <div class="col-md-6">
+              <div class="p-2.5 rounded bg-surface border small">
+                <strong class="text-main d-block fs-6">{{ med.medicine_name }}</strong>
+                <span class="text-muted fs-8 d-block">{{ med.generic_name }} ({{ med.drug_class }})</span>
+                <span class="text-success fs-8 font-monospace"><i class="fa-solid fa-check me-1"></i> Listed in the configured medication reference database.</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <span class="text-muted fs-8 opacity-75 d-block">
+            Medication references are informational and do not constitute a prescription or treatment recommendation.
+          </span>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info border-0 p-4">
+        <i class="fa-solid fa-info-circle text-info me-2"></i> No specific condition matches were established. Please review the follow-up questions below or consult a doctor for clinical evaluation.
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- 5. Targeted Follow-Up Questions -->
+  {% if result.missing_questions %}
+  <div class="card mb-4 p-4">
+    <h4 class="fw-bold mb-2 text-warning">
+      <i class="fa-solid fa-clipboard-question me-2"></i> Recommended Questions to Discuss with a Doctor
+    </h4>
+    <p class="text-muted small mb-3">
+      Discussing these specific details with your physician will assist in diagnostic evaluation:
+    </p>
+    
+    <div class="list-group border-0">
+      {% for q in result.missing_questions %}
+      <div class="list-group-item bg-surface text-main border rounded-3 mb-2 p-3">
+        <div class="d-flex align-items-center gap-2">
+          <i class="fa-solid fa-circle-question text-primary"></i>
+          <span>{{ q }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 6. Medical Information Disclaimer -->
+  <div class="card p-3 mb-4 text-muted small text-center">
+    <i class="fa-solid fa-shield-halved me-1 text-primary"></i> <strong>Medical Disclaimer:</strong>
+    This report provides AI-assisted health information and does not replace professional medical evaluation or clinical diagnosis.
+  </div>
+
+  <!-- Bottom Toolbar -->
+  <div class="d-flex justify-content-center gap-3 flex-wrap my-4">
+    <a href="/doctors" class="btn btn-outline-primary btn-rounded">
+      <i class="fa-solid fa-user-doctor me-1"></i> Find Relevant Specialist
+    </a>
+    <a href="/prescription" class="btn btn-outline-secondary btn-rounded">
+      <i class="fa-solid fa-pills me-1"></i> Prescription Safety Check
+    </a>
+    <a href="/" class="btn btn-primary btn-rounded">
+      <i class="fa-solid fa-stethoscope me-1"></i> Start New Assessment
+    </a>
+  </div>
+
+</div>
+{% endblock %}

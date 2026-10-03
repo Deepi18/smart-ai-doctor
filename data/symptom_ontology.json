@@ -1,0 +1,247 @@
+{
+  "fever": {
+    "id": "SYM_FEVER",
+    "canonical_name": "Fever",
+    "synonyms": ["feverish", "high temperature", "high temp", "high fever", "pyrexia", "hot feeling", "elevated temperature"],
+    "category": "General",
+    "description": "Elevation in body temperature above normal range (≥ 38°C or 100.4°F)."
+  },
+  "cough": {
+    "id": "SYM_COUGH",
+    "canonical_name": "Cough",
+    "synonyms": ["coughing", "dry cough", "wet cough", "hacking cough", "severe cough", "coughing up mucus"],
+    "category": "Respiratory",
+    "description": "Sudden, repetitive reflex to clear the breathing passages of secretions or irritants."
+  },
+  "headache": {
+    "id": "SYM_HEADACHE",
+    "canonical_name": "Headache",
+    "synonyms": ["head pain", "throbbing head", "migraine", "head throbbing", "head ache", "pressure in head"],
+    "category": "Neurological",
+    "description": "Pain or aching sensation anywhere in the region of the head or neck."
+  },
+  "fatigue": {
+    "id": "SYM_FATIGUE",
+    "canonical_name": "Fatigue",
+    "synonyms": ["tired", "tiredness", "exhausted", "exhaustion", "low energy", "weakness", "lethargy", "feeling drained"],
+    "category": "General",
+    "description": "Overall feeling of tiredness, lack of energy, or physical weakness."
+  },
+  "chest_pain": {
+    "id": "SYM_CHEST_PAIN",
+    "canonical_name": "Chest Pain",
+    "synonyms": ["chest discomfort", "tight chest", "chest hurts", "pain in chest", "pressure in chest", "angina pain"],
+    "category": "Cardiovascular",
+    "description": "Discomfort or pain felt anywhere along the front of your body between neck and upper abdomen."
+  },
+  "shortness_of_breath": {
+    "id": "SYM_DYSPNEA",
+    "canonical_name": "Shortness of Breath",
+    "synonyms": ["breathlessness", "difficulty breathing", "hard to breathe", "can't breathe properly", "cant breathe", "dyspnea", "wheezing", "gasping for air"],
+    "category": "Respiratory",
+    "description": "Uncomfortable or intense sensation of difficulty breathing or inability to catch breath."
+  },
+  "abdominal_pain": {
+    "id": "SYM_ABDOMINAL_PAIN",
+    "canonical_name": "Abdominal Pain",
+    "synonyms": ["stomach pain", "stomach ache", "tummy pain", "belly ache", "gut pain", "stomach cramps"],
+    "category": "Digestive",
+    "description": "Pain or discomfort occurring in the area between chest and pelvis."
+  },
+  "sore_throat": {
+    "id": "SYM_SORE_THROAT",
+    "canonical_name": "Sore Throat",
+    "synonyms": ["throat pain", "scratchy throat", "pain swallowing", "raw throat", "throat inflammation"],
+    "category": "Respiratory",
+    "description": "Pain, scratchiness, or irritation of the throat that often worsens when swallowing."
+  },
+  "joint_pain": {
+    "id": "SYM_JOINT_PAIN",
+    "canonical_name": "Joint Pain",
+    "synonyms": ["pain in joints", "knee pain", "arthralgia", "joint stiffness", "aching joints"],
+    "category": "Musculoskeletal",
+    "description": "Discomfort, pain, or inflammation arising from any joint."
+  },
+  "nausea": {
+    "id": "SYM_NAUSEA",
+    "canonical_name": "Nausea",
+    "synonyms": ["nauseous", "feeling sick", "queasy", "upset stomach", "sick to stomach"],
+    "category": "Digestive",
+    "description": "Sensation of unease and discomfort in stomach with an urge to vomit."
+  },
+  "vomiting": {
+    "id": "SYM_VOMITING",
+    "canonical_name": "Vomiting",
+    "synonyms": ["throwing up", "puking", "emesis", "vomit"],
+    "category": "Digestive",
+    "description": "Involuntary, forceful ejection of stomach contents through the mouth."
+  },
+  "diarrhea": {
+    "id": "SYM_DIARRHEA",
+    "canonical_name": "Diarrhea",
+    "synonyms": ["loose stool", "watery stool", "loose motion", "loose motions", "frequent bowel movement", "runs"],
+    "category": "Digestive",
+    "description": "Condition of having three or more loose, liquid, or watery bowel movements per day."
+  },
+  "dizziness": {
+    "id": "SYM_DIZZINESS",
+    "canonical_name": "Dizziness",
+    "synonyms": ["dizzy", "lightheaded", "spinning head", "vertigo", "feeling faint", "unsteady"],
+    "category": "Neurological",
+    "description": "Sensation of lightheadedness, unsteadiness, or feeling that surroundings are spinning."
+  },
+  "runny_nose": {
+    "id": "SYM_RUNNY_NOSE",
+    "canonical_name": "Runny Nose",
+    "synonyms": ["nasal congestion", "stuffy nose", "sneezing", "rhinorrhea", "blocked nose"],
+    "category": "Respiratory",
+    "description": "Excess nasal discharge or congestion in nostrils."
+  },
+  "muscle_aches": {
+    "id": "SYM_MUSCLE_ACHES",
+    "canonical_name": "Muscle Aches",
+    "synonyms": ["body ache", "body pain", "muscle pain", "myalgia", "aching muscles"],
+    "category": "General",
+    "description": "Pain or discomfort affecting muscles throughout the body."
+  },
+  "loss_of_taste_or_smell": {
+    "id": "SYM_ANOSMIA",
+    "canonical_name": "Loss of Taste or Smell",
+    "synonyms": ["loss of smell", "loss of taste", "cannot smell", "no taste", "anosmia", "ageusia"],
+    "category": "Neurological",
+    "description": "Partial or complete loss of sense of smell or taste."
+  },
+  "chills": {
+    "id": "SYM_CHILLS",
+    "canonical_name": "Chills",
+    "synonyms": ["shivering", "cold chills", "feeling cold", "rigors"],
+    "category": "General",
+    "description": "Feeling of coldness accompanied by involuntary shivering."
+  },
+  "skin_rash": {
+    "id": "SYM_RASH",
+    "canonical_name": "Skin Rash",
+    "synonyms": ["rash", "skin spots", "itching rash", "red spots", "dermatitis"],
+    "category": "Dermatological",
+    "description": "Noticeable change in texture or color of skin, often accompanied by itching or inflammation."
+  },
+  "sweating": {
+    "id": "SYM_SWEATING",
+    "canonical_name": "Sweating",
+    "synonyms": ["night sweats", "profuse sweating", "perspiration", "excessive sweat"],
+    "category": "General",
+    "description": "Excretion of fluid by sweat glands, often excessive during fever or cardiac distress."
+  },
+  "back_pain": {
+    "id": "SYM_BACK_PAIN",
+    "canonical_name": "Back Pain",
+    "synonyms": ["backache", "lower back pain", "spine pain", "lumbago"],
+    "category": "Musculoskeletal",
+    "description": "Pain originating in spine, muscles, or nerves of the back."
+  },
+  "high_blood_pressure": {
+    "id": "SYM_HYPERTENSION",
+    "canonical_name": "High Blood Pressure",
+    "synonyms": ["hypertension", "high bp", "elevated bp"],
+    "category": "Cardiovascular",
+    "description": "Abnormally high pressure of blood against arterial walls."
+  },
+  "frequent_urination": {
+    "id": "SYM_FREQUENT_URINATION",
+    "canonical_name": "Frequent Urination",
+    "synonyms": ["peeing a lot", "urinating constantly", "polyuria", "increased urination"],
+    "category": "Renal",
+    "description": "Need to urinate more often than usual."
+  },
+  "painful_urination": {
+    "id": "SYM_DYSURIA",
+    "canonical_name": "Painful Urination",
+    "synonyms": ["burning while urinating", "burning sensation when peeing", "dysuria", "painful peeing", "pain when urinating", "burning urine"],
+    "category": "Renal",
+    "description": "Discomfort, pain, or burning sensation during urination."
+  },
+  "excessive_thirst": {
+    "id": "SYM_EXCESSIVE_THIRST",
+    "canonical_name": "Excessive Thirst",
+    "synonyms": ["very thirsty", "constant thirst", "polydipsia", "unquenchable thirst"],
+    "category": "General",
+    "description": "Abnormal or constant feeling of needing to drink fluids."
+  },
+  "stiff_neck": {
+    "id": "SYM_STIFF_NECK",
+    "canonical_name": "Stiff Neck",
+    "synonyms": ["neck stiffness", "nuchal rigidity", "painful neck movement"],
+    "category": "Neurological",
+    "description": "Soreness and difficulty moving or bending the neck."
+  },
+  "confusion": {
+    "id": "SYM_CONFUSION",
+    "canonical_name": "Confusion",
+    "synonyms": ["disoriented", "disorientation", "memory fog", "altered mental status", "brain fog"],
+    "category": "Neurological",
+    "description": "Inability to think as clearly or quickly as usual, or feeling disoriented."
+  },
+  "light_sensitivity": {
+    "id": "SYM_PHOTOPHOBIA",
+    "canonical_name": "Sensitivity to Light",
+    "synonyms": ["photophobia", "light sensitivity", "sensitive to light", "bright light hurts eyes"],
+    "category": "Ophthalmological / Neurological",
+    "description": "Intolerance or discomfort caused by light exposure."
+  },
+  "ear_pain": {
+    "id": "SYM_EAR_PAIN",
+    "canonical_name": "Ear Pain",
+    "synonyms": ["ear ache", "ear pain", "pain in ear", "otalgia"],
+    "category": "ENT",
+    "description": "Pain or discomfort inside or around the ear canal."
+  },
+  "tinnitus": {
+    "id": "SYM_TINNITUS",
+    "canonical_name": "Tinnitus / Ringing in Ears",
+    "synonyms": ["ringing in ears", "buzzing in ears", "tinnitus"],
+    "category": "ENT",
+    "description": "Perception of noise or ringing in ears without external sound."
+  },
+  "swollen_ankle": {
+    "id": "SYM_SWOLLEN_ANKLE",
+    "canonical_name": "Swollen Legs / Ankles",
+    "synonyms": ["swollen ankle", "swollen leg", "edema", "ankle swelling", "foot swelling"],
+    "category": "Cardiovascular",
+    "description": "Accumulation of fluid causing swelling in feet, ankles, or legs."
+  },
+  "eye_redness": {
+    "id": "SYM_EYE_REDNESS",
+    "canonical_name": "Eye Redness / Irritation",
+    "synonyms": ["red eyes", "eye irritation", "pink eye", "conjunctivitis", "bloodshot eyes"],
+    "category": "Ophthalmological",
+    "description": "Red or bloodshot appearance of sclera due to swollen blood vessels."
+  },
+  "tremor": {
+    "id": "SYM_TREMOR",
+    "canonical_name": "Tremor",
+    "synonyms": ["shaking", "hand tremor", "shaking hands", "tremors", "involuntary shaking"],
+    "category": "Neurological",
+    "description": "Involuntary, rhythmic muscle contraction leading to shaking movements."
+  },
+  "muscle_stiffness": {
+    "id": "SYM_MUSCLE_STIFFNESS",
+    "canonical_name": "Muscle Stiffness",
+    "synonyms": ["stiff muscles", "rigidity", "muscle rigidity", "stiffness in joints"],
+    "category": "Musculoskeletal",
+    "description": "Inability of muscles to relax normally, causing tightness or stiffness."
+  },
+  "slowed_movement": {
+    "id": "SYM_SLOWED_MOVEMENT",
+    "canonical_name": "Slowed Movement",
+    "synonyms": ["bradykinesia", "slow movement", "sluggish movement"],
+    "category": "Neurological",
+    "description": "Slowness of movement, characteristic of neurological condition like Parkinsonism."
+  },
+  "increased_hunger": {
+    "id": "SYM_POLYPHAGIA",
+    "canonical_name": "Increased Hunger",
+    "synonyms": ["increased hunger", "excessive hunger", "constant hunger", "unusually hungry", "polyphagia"],
+    "category": "Endocrine",
+    "description": "Excessive or unquenchable hunger and appetite."
+  }
+}

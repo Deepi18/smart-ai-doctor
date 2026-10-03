@@ -1,0 +1,13 @@
+flask
+Flask-WTF
+spacy
+openai
+requests
+reportlab
+pandas
+numpy
+scikit-learn
+python-dotenv
+joblib
+werkzeug
+
